@@ -1,0 +1,28 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CryptoTradingIdeas", "CryptoTradingIdeas\CryptoTradingIdeas.csproj", "{4E6501CD-D0AC-45B4-8BD7-1B0EB74DD1D5}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CryptoTradingIdeas.ViewModel", "CryptoTradingIdeas.ViewModel\CryptoTradingIdeas.ViewModel.csproj", "{A8C2A6CA-EC16-45CE-BED0-24A14F5F7EDA}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CryptoTradingIdeas.Core", "CryptoTradingIdeas.Core\CryptoTradingIdeas.Core.csproj", "{66671AC8-54CC-47E4-B4E3-CBA10FFC5148}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{4E6501CD-D0AC-45B4-8BD7-1B0EB74DD1D5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4E6501CD-D0AC-45B4-8BD7-1B0EB74DD1D5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4E6501CD-D0AC-45B4-8BD7-1B0EB74DD1D5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4E6501CD-D0AC-45B4-8BD7-1B0EB74DD1D5}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A8C2A6CA-EC16-45CE-BED0-24A14F5F7EDA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A8C2A6CA-EC16-45CE-BED0-24A14F5F7EDA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A8C2A6CA-EC16-45CE-BED0-24A14F5F7EDA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A8C2A6CA-EC16-45CE-BED0-24A14F5F7EDA}.Release|Any CPU.Build.0 = Release|Any CPU
+		{66671AC8-54CC-47E4-B4E3-CBA10FFC5148}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{66671AC8-54CC-47E4-B4E3-CBA10FFC5148}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{66671AC8-54CC-47E4-B4E3-CBA10FFC5148}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{66671AC8-54CC-47E4-B4E3-CBA10FFC5148}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+EndGlobal

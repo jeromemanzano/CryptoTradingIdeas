@@ -1,0 +1,19 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+    <PropertyGroup>
+        <TargetFramework>net9.0</TargetFramework>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <Nullable>enable</Nullable>
+    </PropertyGroup>
+    <ItemGroup>
+      <ProjectReference Include="..\CryptoTradingIdeas.Core\CryptoTradingIdeas.Core.csproj" />
+    </ItemGroup>
+    <ItemGroup>
+      <PackageReference Include="Fody" Version="6.9.2">
+        <PrivateAssets>all</PrivateAssets>
+        <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+      </PackageReference>
+      <PackageReference Include="PropertyChanged.Fody" Version="4.1.0" />
+      <PackageReference Include="ReactiveUI" Version="20.3.1" />
+    </ItemGroup>
+
+</Project>
