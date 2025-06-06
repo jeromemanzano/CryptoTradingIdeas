@@ -7,6 +7,8 @@
     </PropertyGroup>
 
     <ItemGroup>
+      <PackageReference Include="CryptoClients.Net" Version="3.1.0" />
+      <PackageReference Include="DynamicData" Version="9.4.1" />
       <PackageReference Include="ReactiveUI" Version="20.3.1" />
     </ItemGroup>
 

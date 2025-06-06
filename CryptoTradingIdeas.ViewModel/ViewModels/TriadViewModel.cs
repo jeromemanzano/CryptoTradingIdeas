@@ -1,9 +1,22 @@
+using System.Reactive.Disposables;
+using CryptoTradingIdeas.Core.Interfaces;
+using DynamicData.Alias;
 using ReactiveUI;
 
 namespace CryptoTradingIdeas.ViewModel.ViewModels;
 
-public class TriadViewModel : ViewModelBase, IRoutableViewModel
+public class TriadViewModel : ViewModelBase
 {
-    public string? UrlPathSegment { get; } = nameof(TriadViewModel);
-    public IScreen HostScreen { get; }
+    public TriadViewModel(
+        ISpotDataCacheManager spotDataCacheManager)
+    {
+        this.WhenActivated(disposable =>
+        {
+            spotDataCacheManager
+                .SpotDataCache
+                .Connect()
+                .Subscribe()
+                .DisposeWith(disposable);
+        });
+    }
 }

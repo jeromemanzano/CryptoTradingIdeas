@@ -13,7 +13,7 @@ public class ServiceRegistrationGenerator : IIncrementalGenerator
         context.RegisterSourceOutput(context.CompilationProvider, GenerateSource);
     }
 
-    private void GenerateSource(SourceProductionContext context, Compilation compilation)
+    private static void GenerateSource(SourceProductionContext context, Compilation compilation)
     {
         // Get the assembly prefix from the current compilation's assembly name
         var assemblyPrefix = compilation.Assembly.Name.Split('.')[0];
@@ -124,7 +124,7 @@ public static class ServiceRegistration
         var injectionNamespace = $"{assemblyPrefix}.Core.Injection";
 
         return allInterfaces
-            .Where(symbol => 
+            .Where(symbol =>
                 symbol.DeclaredAccessibility == Accessibility.Public &&
                 (symbol.ContainingNamespace?.ToDisplayString().StartsWith(assemblyPrefix) ?? false) &&
                 symbol.ContainingNamespace?.ToDisplayString() != injectionNamespace);
