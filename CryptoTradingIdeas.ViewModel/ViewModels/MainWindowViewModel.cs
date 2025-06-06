@@ -1,8 +1,9 @@
+using CryptoTradingIdeas.Core.Injection;
 using ReactiveUI;
 
 namespace CryptoTradingIdeas.ViewModel.ViewModels;
 
-public class MainWindowViewModel : ReactiveObject, IScreen
+public class MainWindowViewModel : ReactiveObject, IScreen, ISingletonDependency
 {
     public RoutingState Router { get; } = new ();
 

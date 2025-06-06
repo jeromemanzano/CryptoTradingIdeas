@@ -1,3 +1,4 @@
+using CryptoTradingIdeas.Core.Injection;
 using ReactiveUI;
 
 namespace CryptoTradingIdeas.ViewModel.ViewModels;
