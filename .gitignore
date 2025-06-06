@@ -1,0 +1,23 @@
+# User-specific files
+*.suo
+*.user
+*.sln.docstates
+.vs/
+# Build results
+*.sln.ide/
+[Dd]ebug/
+[Rr]elease/
+x64/
+[Bb]in/
+[Oo]bj/
+#################
+## Rider
+#################
+.idea
+/packages/
+riderModule.iml
+/_ReSharper.Caches/
+#################
+## VS Code
+#################
+.vscode/
