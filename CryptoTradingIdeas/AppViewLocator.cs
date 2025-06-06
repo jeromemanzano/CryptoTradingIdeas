@@ -1,15 +1,17 @@
 using System;
-using CryptoTradingIdeas.ViewModel.ViewModels;
-using CryptoTradingIdeas.Views;
 using ReactiveUI;
+using Splat;
 
 namespace CryptoTradingIdeas;
 
 public class AppViewLocator : IViewLocator
 {
-    public IViewFor ResolveView<T>(T? viewModel, string? contract = null) => viewModel switch
+    public IViewFor? ResolveView<T>(T? viewModel, string? contract = null)
     {
-        TriadViewModel context => new TriadView { DataContext = context },
-        _ => throw new ArgumentOutOfRangeException(nameof(viewModel))
-    };
+        ArgumentNullException.ThrowIfNull(viewModel);
+
+        var viewType = typeof(Core.Interfaces.IViewFor<>).MakeGenericType(viewModel.GetType());
+
+        return Locator.Current.GetService(viewType) as IViewFor;
+    }
 }

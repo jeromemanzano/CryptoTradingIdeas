@@ -1,10 +1,10 @@
 using Avalonia.ReactiveUI;
-using CryptoTradingIdeas.Core.Injection;
+using CryptoTradingIdeas.Core.Interfaces;
 using CryptoTradingIdeas.ViewModel.ViewModels;
 
 namespace CryptoTradingIdeas.Views;
 
-public partial class TriadView : ReactiveUserControl<TriadViewModel>, ISingletonDependency
+public partial class TriadView : ReactiveUserControl<TriadViewModel>, ISingletonViewFor<TriadViewModel>
 {
     public TriadView()
     {

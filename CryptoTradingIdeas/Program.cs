@@ -1,6 +1,7 @@
 ﻿using Avalonia;
 using System;
-using Avalonia.ReactiveUI;
+using ReactiveUI.Avalonia.Splat;
+using CryptoTradingIdeas.Core.Injection; // Reference used for source generated RegisterApplicationServices
 
 namespace CryptoTradingIdeas;
 
@@ -17,7 +18,11 @@ sealed class Program
     public static AppBuilder BuildAvaloniaApp()
         => AppBuilder.Configure<App>()
             .UsePlatformDetect()
-            .UseReactiveUI()
+            .UseReactiveUIWithMicrosoftDependencyResolver(services =>
+            {
+                // Register services
+                services.RegisterApplicationServices();
+            })
             .WithInterFont()
             .LogToTrace();
 }

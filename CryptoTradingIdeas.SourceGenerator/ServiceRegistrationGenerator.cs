@@ -1,3 +1,4 @@
+using System.Collections.Immutable;
 using Microsoft.CodeAnalysis;
 using System.Text;
 
@@ -14,6 +15,9 @@ public class ServiceRegistrationGenerator : IIncrementalGenerator
 
     private void GenerateSource(SourceProductionContext context, Compilation compilation)
     {
+        // Get the assembly prefix from the current compilation's assembly name
+        var assemblyPrefix = compilation.Assembly.Name.Split('.')[0];
+
         // Get all types that implement our dependency interfaces
         var scopedDependencySymbol = compilation.GetTypeByMetadataName("CryptoTradingIdeas.Core.Injection.IScopedDependency");
         var singletonDependencySymbol = compilation.GetTypeByMetadataName("CryptoTradingIdeas.Core.Injection.ISingletonDependency");
@@ -76,45 +80,33 @@ public static class ServiceRegistration
         foreach (var type in scopedTypes)
         {
             sourceBuilder.AppendLine($"        services.AddScoped<{type.ToDisplayString()}>();");
-            context.ReportDiagnostic(Diagnostic.Create(
-                new DiagnosticDescriptor(
-                    "SG0002",
-                    "Registered Service",
-                    $"Registered scoped service: {type.ToDisplayString()}",
-                    "Generation",
-                    DiagnosticSeverity.Info,
-                    true),
-                Location.None));
+            // Register all public interfaces
+            foreach (var @interface in GetValidTypeSymbols(type.AllInterfaces, assemblyPrefix))
+            {
+                sourceBuilder.AppendLine($"        services.AddScoped<{@interface.ToDisplayString()}, {type.ToDisplayString()}>();");
+            }
         }
 
         // Register singleton services
         foreach (var type in singletonTypes)
         {
             sourceBuilder.AppendLine($"        services.AddSingleton<{type.ToDisplayString()}>();");
-            context.ReportDiagnostic(Diagnostic.Create(
-                new DiagnosticDescriptor(
-                    "SG0002",
-                    "Registered Service",
-                    $"Registered singleton service: {type.ToDisplayString()}",
-                    "Generation",
-                    DiagnosticSeverity.Info,
-                    true),
-                Location.None));
+            // Register all public interfaces
+            foreach (var @interface in GetValidTypeSymbols(type.AllInterfaces, assemblyPrefix))
+            {
+                sourceBuilder.AppendLine($"        services.AddSingleton<{@interface.ToDisplayString()}, {type.ToDisplayString()}>();");
+            }
         }
 
         // Register transient services
         foreach (var type in transientTypes)
         {
             sourceBuilder.AppendLine($"        services.AddTransient<{type.ToDisplayString()}>();");
-            context.ReportDiagnostic(Diagnostic.Create(
-                new DiagnosticDescriptor(
-                    "SG0002",
-                    "Registered Service",
-                    $"Registered transient service: {type.ToDisplayString()}",
-                    "Generation",
-                    DiagnosticSeverity.Info,
-                    true),
-                Location.None));
+            // Register all public interfaces
+            foreach (var @interface in GetValidTypeSymbols(type.AllInterfaces, assemblyPrefix))
+            {
+                sourceBuilder.AppendLine($"        services.AddTransient<{@interface.ToDisplayString()}, {type.ToDisplayString()}>();");
+            }
         }
 
         sourceBuilder.AppendLine(@"
@@ -123,6 +115,19 @@ public static class ServiceRegistration
 }");
 
         context.AddSource("ServiceRegistration.g.cs", sourceBuilder.ToString());
+    }
+
+    private static IEnumerable<INamedTypeSymbol> GetValidTypeSymbols(
+        ImmutableArray<INamedTypeSymbol> allInterfaces,
+        string assemblyPrefix)
+    {
+        var injectionNamespace = $"{assemblyPrefix}.Core.Injection";
+
+        return allInterfaces
+            .Where(symbol => 
+                symbol.DeclaredAccessibility == Accessibility.Public &&
+                (symbol.ContainingNamespace?.ToDisplayString().StartsWith(assemblyPrefix) ?? false) &&
+                symbol.ContainingNamespace?.ToDisplayString() != injectionNamespace);
     }
 
     private static void ProcessNamespace(
@@ -177,8 +182,14 @@ public static class ServiceRegistration
         // Process nested types
         foreach (var nestedType in type.GetTypeMembers())
         {
-            ProcessType(nestedType, scopedDependencySymbol, singletonDependencySymbol, transientDependencySymbol,
-                scopedTypes, singletonTypes, transientTypes);
+            ProcessType(
+                nestedType,
+                scopedDependencySymbol,
+                singletonDependencySymbol,
+                transientDependencySymbol,
+                scopedTypes,
+                singletonTypes,
+                transientTypes);
         }
 
         // Check if the type implements any of our interfaces
