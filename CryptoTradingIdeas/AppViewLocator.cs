@@ -10,7 +10,7 @@ public class AppViewLocator : IViewLocator
     {
         ArgumentNullException.ThrowIfNull(viewModel);
 
-        var viewType = typeof(Core.Interfaces.IViewFor<>).MakeGenericType(viewModel.GetType());
+        var viewType = typeof(Core.Interfaces.Services.IViewFor<>).MakeGenericType(viewModel.GetType());
 
         return Locator.Current.GetService(viewType) as IViewFor;
     }

@@ -6,6 +6,20 @@
         <BuiltInComInteropSupport>true</BuiltInComInteropSupport>
         <ApplicationManifest>app.manifest</ApplicationManifest>
         <AvaloniaUseCompiledBindingsByDefault>true</AvaloniaUseCompiledBindingsByDefault>
+        <UseAppHost>true</UseAppHost>
+        <PublishSingleFile>true</PublishSingleFile>
+        <SelfContained>true</SelfContained>
+        <RuntimeIdentifier>osx-arm64</RuntimeIdentifier>
+        <PublishReadyToRun>true</PublishReadyToRun>
+        <IncludeNativeLibrariesForSelfExtract>true</IncludeNativeLibrariesForSelfExtract>
+        <ApplicationIcon>Assets/avalonia-logo.ico</ApplicationIcon>
+        <CreatePackage>true</CreatePackage>
+        <EnableCodeSigning>true</EnableCodeSigning>
+        <CodesignEntitlements>Entitlements.plist</CodesignEntitlements>
+        <OutputPath>..\Output\$(Configuration)\</OutputPath>
+        <PublishDir>..\Output\Publish\$(Configuration)\</PublishDir>
+        <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
+        <AppendRuntimeIdentifierToOutputPath>false</AppendRuntimeIdentifierToOutputPath>
     </PropertyGroup>
 
     <ItemGroup>
@@ -13,12 +27,16 @@
     </ItemGroup>
 
     <ItemGroup>
-        <PackageReference Include="Avalonia" Version="11.3.0"/>
-        <PackageReference Include="Avalonia.Desktop" Version="11.3.0"/>
-        <PackageReference Include="Avalonia.ReactiveUI" Version="11.3.0" />
-        <PackageReference Include="Avalonia.Themes.Fluent" Version="11.3.0"/>
-        <PackageReference Include="Avalonia.Fonts.Inter" Version="11.3.0"/>
+        <PackageReference Include="Avalonia" Version="11.3.1"/>
+        <PackageReference Include="Avalonia.Controls.DataGrid" Version="11.3.1" />
+        <PackageReference Include="Avalonia.Desktop" Version="11.3.1"/>
+        <PackageReference Include="Avalonia.ReactiveUI" Version="11.3.1" />
+        <PackageReference Include="Avalonia.Themes.Fluent" Version="11.3.1"/>
+        <PackageReference Include="Avalonia.Fonts.Inter" Version="11.3.1"/>
+        <PackageReference Include="Avalonia.Xaml.Interactions" Version="11.3.0.6" />
+        <PackageReference Include="Avalonia.Xaml.Interactivity" Version="11.3.0.6" />
         <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="9.0.5" />
+        <PackageReference Include="Serilog.Sinks.File" Version="7.0.0" />
         <!--Condition below is needed to remove Avalonia.Diagnostics package from build output in Release configuration.-->
         <PackageReference Include="Avalonia.Diagnostics" Version="11.3.0">
             <IncludeAssets Condition="'$(Configuration)' != 'Debug'">None</IncludeAssets>
@@ -26,6 +44,7 @@
         </PackageReference>
         <PackageReference Include="Splat" Version="15.3.1" />
         <PackageReference Include="Splat.Avalonia.Microsoft.Extensions.DependencyInjection" Version="15.3.1" />
+        <PackageReference Include="Splat.Serilog" Version="15.3.1" />
     </ItemGroup>
 
     <ItemGroup>

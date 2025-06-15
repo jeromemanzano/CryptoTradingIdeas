@@ -1,4 +1,4 @@
-using CryptoTradingIdeas.Core.Interfaces;
+using CryptoTradingIdeas.Core.Interfaces.Services;
 using ReactiveUI;
 using Splat;
 

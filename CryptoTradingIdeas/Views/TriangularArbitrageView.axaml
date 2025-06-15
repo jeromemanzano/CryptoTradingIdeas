@@ -1,0 +1,48 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:viewModels="clr-namespace:CryptoTradingIdeas.ViewModel.ViewModels;assembly=CryptoTradingIdeas.ViewModel"
+             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+             x:DataType="viewModels:TriangularArbitrageViewModel"
+             x:Class="CryptoTradingIdeas.Views.TriangularArbitrageView">
+
+    <DataGrid ItemsSource="{Binding TriangularArbitrageOpportunities}"
+              IsReadOnly="True"
+              CanUserResizeColumns="False"
+              GridLinesVisibility="All"
+              CanUserSortColumns="True">
+        <DataGrid.Columns>
+            <DataGridTextColumn Header="Exchange"
+                                Binding="{Binding Exchange}"
+                                Width="120" />
+            <DataGridTextColumn Binding="{Binding FirstTransaction.PairSymbols}"
+                                Width="120" />
+            <DataGridTextColumn Header="Type"
+                                Width="75"
+                                Binding="{Binding FirstTransaction.Type}" />
+            <DataGridTextColumn Header="Price"
+                                Width="175"
+                                Binding="{Binding FirstTransaction.Price}" />
+            <DataGridTextColumn Binding="{Binding SecondTransaction.PairSymbols}"
+                                Width="120" />
+            <DataGridTextColumn Header="Type"
+                                Width="75"
+                                Binding="{Binding SecondTransaction.Type}" />
+            <DataGridTextColumn Header="Price"
+                                Width="175"
+                                Binding="{Binding SecondTransaction.Price}" />
+            <DataGridTextColumn Binding="{Binding ThirdTransaction.PairSymbols}"
+                                Width="120" />
+            <DataGridTextColumn Header="Type"
+                                Width="75"
+                                Binding="{Binding ThirdTransaction.Type}" />
+            <DataGridTextColumn Header="Price"
+                                Width="175"
+                                Binding="{Binding ThirdTransaction.Price}" />
+            <DataGridTextColumn Header="Gain"
+                                Width="75"
+                                Binding="{Binding PotentialGain, StringFormat='{}{0:P2}'}" />
+        </DataGrid.Columns>
+    </DataGrid>
+</UserControl>

@@ -1,5 +1,7 @@
 using System.Reactive.Disposables;
-using CryptoTradingIdeas.Core.Interfaces;
+using System.Reactive.Linq;
+using System.Reactive.Threading.Tasks;
+using CryptoTradingIdeas.Core.Interfaces.Services;
 using ReactiveUI;
 
 namespace CryptoTradingIdeas.ViewModel.ViewModels;
@@ -9,15 +11,18 @@ public class MainWindowViewModel : ReactiveObject, IHostScreen
     public RoutingState Router { get; } = new ();
 
     public MainWindowViewModel(
-        IRoutableViewModelFactory routableViewModelFactory,
-        ISpotDataCacheManager spotDataCacheManager)
+        IEnumerable<IExchangeService> exchangeServices,
+        IRoutableViewModelFactory routableViewModelFactory)
     {
-        Router.Navigate.Execute(routableViewModelFactory.Create<TriadViewModel>());
+        Router.Navigate.Execute(routableViewModelFactory.Create<TriangularArbitrageViewModel>());
 
         this.WhenActivated(disposables =>
         {
-            spotDataCacheManager.Initialize();
-            spotDataCacheManager.DisposeWith(disposables);
+            exchangeServices
+                .Select(service => service.StartStreamingAsync().ToObservable())
+                .Merge(10)
+                .Subscribe()
+                .DisposeWith(disposables);
         });
     }
 

@@ -2,5 +2,10 @@ namespace CryptoTradingIdeas.Core.Enums;
 
 public enum Exchanges
 {
-    Binance
+    Binance,
+    Mexc,
+    GateIo,
+    Okx,
+    KuCoin,
+    Htx
 }
