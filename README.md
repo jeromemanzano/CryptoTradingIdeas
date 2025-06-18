@@ -8,6 +8,14 @@ This app is my personal lab for testing out crypto trading ideas — a quick and
 ### 1. Triangular Arbitrage
 Triangular arbitrage in is a strategy that takes advantage of price differences between three crypto trading pairs by converting one coin to another, then a third, and back to the original to secure a risk-free profit. It relies on inefficiencies across exchange rates.
 
+## Supported crypto exchanges
+1. [Binance](https://www.binance.com/)
+2. [Gate IO](https://www.gate.com/)
+3. [Htx](https://www.htx.com/)
+4. [KuCoin](https://www.kucoin.com/)
+5. [Mexc](https://www.mexc.com/)
+6. [Okx](https://www.okx.com/)
+
 ## Technology Stack
 
 - **Framework**: .NET 9
