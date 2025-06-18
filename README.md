@@ -12,7 +12,7 @@ Triangular arbitrage in is a strategy that takes advantage of price differences 
 
 - **Framework**: .NET 9
 - **UI Framework**: Avalonia UI
-- **Trading Library**: CryptoClients.Net
+- **Trading Library**: [CryptoClients.Net](https://github.com/JKorf/CryptoClients.Net)
 - **Key Libraries**:
   - DynamicData - For reactive collections and caching
   - ReactiveUI - For reactive programming patterns
