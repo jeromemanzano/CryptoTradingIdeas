@@ -71,8 +71,10 @@ public sealed class TriangularArbitrageService : ITriangularArbitrageService
             .Flatten()
             .Subscribe(trade =>
             {
-                Log.Information($"[Triangular Arbitrage] {trade.Current.Profit} USD profit from trading {trade.Current.Sequence}.");
-            });
+                Log.Information(
+                    $"[Triangular Arbitrage] {trade.Current.Profit} USD profit from trading {trade.Current.Sequence}.");
+            })
+            .DisposeWith(_serviceDisposable);
     }
 
     private IReadOnlyCollection<TriangularArbitrageOpportunity> GetPotentialGains(SpotData spotData)
