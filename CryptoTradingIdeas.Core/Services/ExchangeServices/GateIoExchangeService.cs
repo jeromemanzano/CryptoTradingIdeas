@@ -11,13 +11,14 @@ using GateIo.Net.Enums;
 
 namespace CryptoTradingIdeas.Core.Services.ExchangeServices;
 
-public sealed class GateIoExchangeService
-    (IEntityCache<SpotData, (string, Exchanges)> spotDataCache)
-    : ExchangeServiceBase(spotDataCache), IExchangeService
+public sealed class GateIoExchangeService(
+    IEntityCache<SpotData, (string, Exchanges)> spotDataCache,
+    IEntityCache<LeveragedToken, (string, string, Exchanges)> leveragedTokenCache)
+    : ExchangeServiceBase(spotDataCache, leveragedTokenCache), IExchangeService
 {
     private readonly GateIoRestClient _gateIoRestClient = new();
 
-    public Exchanges Exchange => Exchanges.GateIo;
+    public override Exchanges Exchange => Exchanges.GateIo;
 
     protected override IObservable<SpotData> GetSpotDataStream()
     {

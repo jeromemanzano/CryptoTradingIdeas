@@ -72,7 +72,7 @@ public sealed class TriangularArbitrageService : ITriangularArbitrageService
             .Subscribe(trade =>
             {
                 Log.Information(
-                    $"[Triangular Arbitrage] {trade.Current.Profit} USD profit from trading {trade.Current.Sequence}.");
+                    $"[Triangular Arbitrage] {trade.Current.Profit} USD profit from trading {trade.Current.Sequence} in {trade.Current.Exchange}.");
             })
             .DisposeWith(_serviceDisposable);
     }

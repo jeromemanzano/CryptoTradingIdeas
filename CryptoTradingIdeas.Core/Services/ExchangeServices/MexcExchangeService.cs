@@ -11,13 +11,14 @@ using Mexc.Net.Objects.Models.Spot;
 
 namespace CryptoTradingIdeas.Core.Services.ExchangeServices;
 
-public sealed class MexcExchangeService
-    (IEntityCache<SpotData, (string, Exchanges)> spotDataCache)
-    : ExchangeServiceBase(spotDataCache), IExchangeService
+public sealed class MexcExchangeService(
+    IEntityCache<SpotData, (string, Exchanges)> spotDataCache,
+    IEntityCache<LeveragedToken, (string, string, Exchanges)> leveragedTokenCache)
+    : ExchangeServiceBase(spotDataCache, leveragedTokenCache), IExchangeService
 {
     private readonly MexcRestClient _mexcRestClient = new();
 
-    public Exchanges Exchange => Exchanges.Mexc;
+    public override Exchanges Exchange => Exchanges.Mexc;
 
     protected override IObservable<SpotData> GetSpotDataStream()
     {

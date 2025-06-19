@@ -10,13 +10,14 @@ using HTX.Net.Objects.Models;
 
 namespace CryptoTradingIdeas.Core.Services.ExchangeServices;
 
-public sealed class HtxExchangeService
-    (IEntityCache<SpotData, (string, Exchanges)> spotDataCache)
-    : ExchangeServiceBase(spotDataCache), IExchangeService
+public sealed class HtxExchangeService(
+    IEntityCache<SpotData, (string, Exchanges)> spotDataCache,
+    IEntityCache<LeveragedToken, (string, string, Exchanges)> leveragedTokenCache)
+    : ExchangeServiceBase(spotDataCache, leveragedTokenCache), IExchangeService
 {
     private readonly HTXRestClient _htxRestClient = new();
 
-    public Exchanges Exchange => Exchanges.Htx;
+    public override Exchanges Exchange => Exchanges.Htx;
 
     protected override IObservable<SpotData> GetSpotDataStream()
     {

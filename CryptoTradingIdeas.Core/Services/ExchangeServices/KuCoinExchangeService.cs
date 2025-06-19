@@ -10,13 +10,14 @@ using Kucoin.Net.Objects.Models.Spot;
 
 namespace CryptoTradingIdeas.Core.Services.ExchangeServices;
 
-public sealed class KuCoinExchangeService
-    (IEntityCache<SpotData, (string, Exchanges)> spotDataCache)
-    : ExchangeServiceBase(spotDataCache), IExchangeService
+public sealed class KuCoinExchangeService(
+    IEntityCache<SpotData, (string, Exchanges)> spotDataCache,
+    IEntityCache<LeveragedToken, (string, string, Exchanges)> leveragedTokenCache)
+    : ExchangeServiceBase(spotDataCache, leveragedTokenCache), IExchangeService
 {
     private readonly KucoinRestClient _kuCoinRestClient = new();
 
-    public Exchanges Exchange => Exchanges.KuCoin;
+    public override Exchanges Exchange => Exchanges.KuCoin;
 
     protected override IObservable<SpotData> GetSpotDataStream()
     {

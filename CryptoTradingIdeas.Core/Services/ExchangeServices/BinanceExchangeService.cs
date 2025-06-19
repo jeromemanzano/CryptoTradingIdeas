@@ -11,13 +11,14 @@ using CryptoTradingIdeas.Core.Models.Entities;
 
 namespace CryptoTradingIdeas.Core.Services.ExchangeServices;
 
-public sealed class BinanceExchangeService
-    (IEntityCache<SpotData, (string, Exchanges)> spotDataCache)
-    : ExchangeServiceBase(spotDataCache), IExchangeService
+public sealed class BinanceExchangeService(
+    IEntityCache<SpotData, (string, Exchanges)> spotDataCache,
+    IEntityCache<LeveragedToken, (string, string, Exchanges)> leveragedTokenCache)
+    : ExchangeServiceBase(spotDataCache, leveragedTokenCache), IExchangeService
 {
     private readonly BinanceRestClient _binanceClient = new();
 
-    public Exchanges Exchange => Exchanges.Binance;
+    public override Exchanges Exchange => Exchanges.Binance;
 
     protected override IObservable<SpotData> GetSpotDataStream()
     {

@@ -1,3 +1,4 @@
+using System.Diagnostics.CodeAnalysis;
 using System.Reactive.Disposables;
 using System.Reactive.Linq;
 using CryptoTradingIdeas.Core.Enums;
@@ -7,7 +8,9 @@ using ReactiveUI;
 
 namespace CryptoTradingIdeas.Core.Services.ExchangeServices;
 
-public abstract class ExchangeServiceBase(IEntityCache<SpotData, (string, Exchanges)> spotDataCache)
+public abstract class ExchangeServiceBase(
+    IEntityCache<SpotData, (string, Exchanges)> spotDataCache,
+    IEntityCache<LeveragedToken, (string, string, Exchanges)> leveragedTokenCache)
 {
     private const int RefreshIntervalSeconds = 5;
 
@@ -22,6 +25,8 @@ public abstract class ExchangeServiceBase(IEntityCache<SpotData, (string, Exchan
     private readonly Dictionary<string, string> _unifiedPairSymbols = new();
 
     private readonly CompositeDisposable _serviceCompositeDisposable = new();
+
+    public abstract Exchanges Exchange { get; }
 
     protected static IObservable<long> GetRefreshTimerObservable() => Observable.Timer(
         dueTime: TimeSpan.Zero,
@@ -55,11 +60,29 @@ public abstract class ExchangeServiceBase(IEntityCache<SpotData, (string, Exchan
 
     public async Task StartStreamingAsync()
     {
+        var leveragedTokenSet = new HashSet<(string, string, Exchanges)>();
+
         // 1. Start with retrieving exchange pair symbols
-        foreach (var pairSymbol in await GetExchangePairSymbolsAsync())
+        foreach (var pairSymbol in await GetExchangePairSymbolsAsync().ConfigureAwait(false))
         {
             _activelyTradedPairSymbols.Add(pairSymbol.ExchangePairSymbol, pairSymbol);
             _unifiedPairSymbols.Add($"{pairSymbol.BaseSymbol}{pairSymbol.QuoteSymbol}", pairSymbol.ExchangePairSymbol);
+
+            if (!TryGetLeveragedTokenBaseSymbol(pairSymbol, out var leveragedBaseSymbol))
+                continue;
+
+            var leveragedTokenKey = (leveragedBaseSymbol, pairSymbol.QuoteSymbol, Exchange);
+            if (leveragedTokenSet.Add(leveragedTokenKey))
+                continue;
+
+            // leveragedTokenSet contains the same token base symbol from the same exchange so we know it's a pair
+            leveragedTokenSet.Remove(leveragedTokenKey);
+            leveragedTokenCache.AddOrUpdate(new LeveragedToken
+            {
+                BaseSymbol = leveragedBaseSymbol,
+                QuoteSymbol = pairSymbol.QuoteSymbol,
+                Exchange = Exchange
+            });
         }
 
         // 2. Then, start streaming spot data
@@ -71,6 +94,23 @@ public abstract class ExchangeServiceBase(IEntityCache<SpotData, (string, Exchan
     public void Dispose()
     {
         _serviceCompositeDisposable.Dispose();
+    }
+
+    private static bool TryGetLeveragedTokenBaseSymbol(PairSymbol pairSymbol, [MaybeNullWhen(false)] out string leveragedBaseSymbol)
+    {
+        var baseSymbol = pairSymbol.BaseSymbol;
+        if(baseSymbol.EndsWith("3L", StringComparison.OrdinalIgnoreCase) ||
+           baseSymbol.EndsWith("3S", StringComparison.OrdinalIgnoreCase) ||
+           baseSymbol.EndsWith("5L", StringComparison.OrdinalIgnoreCase) ||
+           baseSymbol.EndsWith("5S", StringComparison.OrdinalIgnoreCase))
+        {
+            // Remove the "L" or "S" suffix to get the base symbol.
+            leveragedBaseSymbol = baseSymbol[..^1];
+            return true;
+        }
+
+        leveragedBaseSymbol = null;
+        return false;
     }
 
     protected record PairSymbol(string ExchangePairSymbol, string BaseSymbol, string QuoteSymbol);

@@ -12,6 +12,7 @@ public class MainWindowViewModel : ReactiveObject, IHostScreen
 
     public MainWindowViewModel(
         IEnumerable<IExchangeService> exchangeServices,
+        ILeveragedTokenArbitrageService leveragedTokenArbitrageService,
         IRoutableViewModelFactory routableViewModelFactory)
     {
         Router.Navigate.Execute(routableViewModelFactory.Create<TriangularArbitrageViewModel>());
@@ -21,6 +22,7 @@ public class MainWindowViewModel : ReactiveObject, IHostScreen
             exchangeServices
                 .Select(service => service.StartStreamingAsync().ToObservable())
                 .Merge(10)
+                .Finally(leveragedTokenArbitrageService.StartUpdatingOpportunities)
                 .Subscribe()
                 .DisposeWith(disposables);
         });
