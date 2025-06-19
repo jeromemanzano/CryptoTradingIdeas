@@ -43,8 +43,7 @@ sealed class Program
         }
         catch (Exception ex)
         {
-            // If logging fails, write to console as fallback
-            Console.WriteLine($"Failed to initialize application: {ex}");
+            Log.Error(ex, "App crashed");
             throw;
         }
         finally

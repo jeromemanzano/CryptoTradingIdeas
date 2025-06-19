@@ -64,7 +64,7 @@ public sealed class TriangularArbitrageService : ITriangularArbitrageService
 
         opportunitiesChanged
             .Filter(gain => gain.PotentialGain > minimumLoggingGainThreshold)
-            .TransformAsync(CalculateActualGainAsync)
+            .TransformAsync(TryCalculateActualGainAsync)
             .Filter(tuple => tuple.Profit > decimal.Zero)
             .Transform(tuple =>
                 new SuccessfulTriangularArbitrageTrade(tuple.Opportunity, tuple.Profit, StartingStableCoinAmount))
@@ -164,25 +164,32 @@ public sealed class TriangularArbitrageService : ITriangularArbitrageService
         conversionRates.BidPrices[spotData.QuoteSymbol] = spotData.BidPrice;
     }
 
-    private async Task<(TriangularArbitrageOpportunity Opportunity, decimal Profit)> CalculateActualGainAsync(
+    private async Task<(TriangularArbitrageOpportunity Opportunity, decimal Profit)> TryCalculateActualGainAsync(
         TriangularArbitrageOpportunity opportunity)
     {
-        var firstConversionAmount = await GetTransactionResultAsync(
-            opportunity.Exchange,
-            opportunity.FirstTransaction,
-            StartingStableCoinAmount);
+        try
+        {
+            var firstConversionAmount = await GetTransactionResultAsync(
+                opportunity.Exchange,
+                opportunity.FirstTransaction,
+                StartingStableCoinAmount);
 
-        var secondConversionAmount = await GetTransactionResultAsync(
-            opportunity.Exchange,
-            opportunity.SecondTransaction,
-            firstConversionAmount);
+            var secondConversionAmount = await GetTransactionResultAsync(
+                opportunity.Exchange,
+                opportunity.SecondTransaction,
+                firstConversionAmount);
 
-        var finalConversionAmount = await GetTransactionResultAsync(
-            opportunity.Exchange,
-            opportunity.ThirdTransaction,
-            secondConversionAmount);
+            var finalConversionAmount = await GetTransactionResultAsync(
+                opportunity.Exchange,
+                opportunity.ThirdTransaction,
+                secondConversionAmount);
 
-        return (opportunity, finalConversionAmount - StartingStableCoinAmount);
+            return (opportunity, finalConversionAmount - StartingStableCoinAmount);
+        }
+        catch
+        {
+            return (opportunity, decimal.Zero);
+        }
     }
 
     private async Task<decimal> GetTransactionResultAsync(Exchanges exchange, TradeTransaction transaction, decimal amount)

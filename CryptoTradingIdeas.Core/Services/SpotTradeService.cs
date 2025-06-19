@@ -35,7 +35,6 @@ public class SpotTradeService : ISpotTradeService
 
         if (baseAssetAmount > 0m)
         {
-            // TODO: use monad instead
             throw new InvalidOperationException(
                 $"{pairSymbols} - " +
                 $"Not enough bid prices to cover the base asset amount. Only {quoteAssetAmount} quote " +
@@ -69,7 +68,6 @@ public class SpotTradeService : ISpotTradeService
 
         if (quoteAssetAmount > 0m)
         {
-            // TODO: use monad instead
             throw new InvalidOperationException(
                 $"{pairSymbols} - " +
                 $"Not enough ask prices to cover the quote asset amount. Only {baseAssetAmount} base " +
