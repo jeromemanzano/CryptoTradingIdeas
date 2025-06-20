@@ -10,12 +10,14 @@ public class MainWindowViewModel : ReactiveObject, IHostScreen
 {
     public RoutingState Router { get; } = new ();
 
+    public IEnumerable<ITabViewModel> Tabs { get; }
+
     public MainWindowViewModel(
+        IEnumerable<ITabViewModel> tabViewModels,
         IEnumerable<IExchangeService> exchangeServices,
-        ILeveragedTokenArbitrageService leveragedTokenArbitrageService,
-        IRoutableViewModelFactory routableViewModelFactory)
+        ILeveragedTokenArbitrageService leveragedTokenArbitrageService)
     {
-        Router.Navigate.Execute(routableViewModelFactory.Create<TriangularArbitrageViewModel>());
+        Tabs = tabViewModels;
 
         this.WhenActivated(disposables =>
         {

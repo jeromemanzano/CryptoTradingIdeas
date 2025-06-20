@@ -1,8 +1,9 @@
 using CryptoTradingIdeas.Core.Enums;
+using ReactiveUI;
 
 namespace CryptoTradingIdeas.Core.Models.Dtos;
 
-public class LeveragedTokenArbitrageOpportunity
+public class LeveragedTokenArbitrageOpportunity : ReactiveObject
 {
     public Exchanges Exchange { get; init; }
     public int Multiplier { get; init; }
@@ -16,5 +17,7 @@ public class LeveragedTokenArbitrageOpportunity
     public decimal CurrentLongPrice { get; set; }
     public decimal CurrentShortPrice { get; set; }
 
-    public decimal Profit => CurrentLongPrice + CurrentShortPrice - 200m;
+    public decimal Profit => CurrentLongPrice != decimal.Zero && CurrentShortPrice != decimal.Zero
+        ? CurrentLongPrice + CurrentShortPrice - 200m
+        : decimal.Zero;
 }

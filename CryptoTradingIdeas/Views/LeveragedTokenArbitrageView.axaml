@@ -1,0 +1,36 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:viewModels="clr-namespace:CryptoTradingIdeas.ViewModel.ViewModels;assembly=CryptoTradingIdeas.ViewModel"
+             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+             x:DataType="viewModels:LeveragedTokenArbitrageViewModel"
+             x:Class="CryptoTradingIdeas.Views.LeveragedTokenArbitrageView">
+
+    <DataGrid ItemsSource="{Binding LeveragedTokenArbitrageOpportunities}"
+              IsReadOnly="True"
+              CanUserResizeColumns="False"
+              GridLinesVisibility="All"
+              CanUserSortColumns="True">
+        <DataGrid.Columns>
+            <DataGridTextColumn Header="Exchange"
+                                Binding="{Binding Exchange}"
+                                Width="100" />
+            <DataGridTextColumn Header="Base Symbol"
+                                Binding="{Binding BaseSymbol}"
+                                Width="120" />
+            <DataGridTextColumn Header="Quote Symbol"
+                                Binding="{Binding QuoteSymbol}"
+                                Width="120" />
+            <DataGridTextColumn Header="Current Long Price"
+                                Binding="{Binding CurrentLongPrice, StringFormat='{}{0:F2}'}"
+                                Width="160" />
+            <DataGridTextColumn Header="Current Short Price"
+                                Binding="{Binding CurrentShortPrice, StringFormat='{}{0:F2}'}"
+                                Width="160" />
+            <DataGridTextColumn Header="Profit"
+                                Binding="{Binding Profit, StringFormat='{}{0:F2}'}"
+                                Width="100" />
+        </DataGrid.Columns>
+    </DataGrid>
+</UserControl> 

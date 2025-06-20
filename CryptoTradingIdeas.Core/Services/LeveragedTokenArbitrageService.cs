@@ -10,7 +10,6 @@ using CryptoTradingIdeas.Core.Interfaces.Services;
 using CryptoTradingIdeas.Core.Models.Dtos;
 using CryptoTradingIdeas.Core.Models.Entities;
 using DynamicData;
-using DynamicData.PLinq;
 using ReactiveUI;
 using Serilog;
 
@@ -25,7 +24,6 @@ public sealed class LeveragedTokenArbitrageService : ILeveragedTokenArbitrageSer
     public ReadOnlyObservableCollection<LeveragedTokenArbitrageOpportunity> LeveragedTokenArbitrageOpportunities { get; }
 
     public LeveragedTokenArbitrageService(
-        IEntityCache<SpotData, (string, Exchanges)> spotDataCache,
         IEntityCache<LeveragedToken, (string, string, Exchanges)> leveragedTokenCache,
         ISpotTradeService spotTradeService)
     {
@@ -41,7 +39,6 @@ public sealed class LeveragedTokenArbitrageService : ILeveragedTokenArbitrageSer
                 QuoteSymbol = token.QuoteSymbol,
             })
             .ObserveOn(RxApp.MainThreadScheduler)
-            .ForEachChange(opportunity => LogSuccessfulTrades(opportunity.Current))
             .Bind(out var leveragedTokenArbitrageOpportunities)
             .Subscribe()
             .DisposeWith(_serviceDisposable);
@@ -74,6 +71,8 @@ public sealed class LeveragedTokenArbitrageService : ILeveragedTokenArbitrageSer
     private async Task UpdateValuesAsync(LeveragedTokenArbitrageOpportunity opportunity)
     {
         await Task.WhenAll(UpdateLongValuesAsync(), UpdateShortValuesAsync());
+
+        LogSuccessfulTrades(opportunity);
         return;
 
         async Task UpdateLongValuesAsync()

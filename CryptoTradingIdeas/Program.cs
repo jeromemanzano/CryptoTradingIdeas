@@ -1,6 +1,8 @@
 ﻿using Avalonia;
 using System;
 using System.IO;
+using Microsoft.Extensions.DependencyInjection;
+using ReactiveUI;
 using ReactiveUI.Avalonia.Splat;
 using CryptoTradingIdeas.Core.Injection; // Reference used for source generated RegisterApplicationServices
 using Serilog;
@@ -60,6 +62,7 @@ sealed class Program
             {
                 // Register services
                 services.RegisterApplicationServices();
+                services.AddSingleton<IViewLocator, AppViewLocator>();
             })
             .WithInterFont()
             .LogToTrace();
