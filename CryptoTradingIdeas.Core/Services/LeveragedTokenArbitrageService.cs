@@ -70,9 +70,17 @@ public sealed class LeveragedTokenArbitrageService : ILeveragedTokenArbitrageSer
 
     private async Task UpdateValuesAsync(LeveragedTokenArbitrageOpportunity opportunity)
     {
-        await Task.WhenAll(UpdateLongValuesAsync(), UpdateShortValuesAsync());
+        try
+        {
+            await Task.WhenAll(UpdateLongValuesAsync(), UpdateShortValuesAsync());
 
-        LogSuccessfulTrades(opportunity);
+            LogSuccessfulTrades(opportunity);
+        }
+        catch (Exception exception)
+        {
+            Log.Error(exception, $"Error updating leveraged token arbitrage opportunity values for {opportunity.BaseSymbol} in {opportunity.Exchange}.");
+        }
+
         return;
 
         async Task UpdateLongValuesAsync()
